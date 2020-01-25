@@ -10,6 +10,8 @@ import {
   Send
 } from '@material-ui/icons';
 
+import { withTheme } from '../../theme';
+
 const Button = styled.button`
   background: none;
   padding: 0;
@@ -113,4 +115,4 @@ IconButton.propTypes = {
   theme: PropTypes.object
 };
 
-export default IconButton;
+export default withTheme(IconButton);

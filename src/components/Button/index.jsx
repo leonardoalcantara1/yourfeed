@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import color from 'color';
+import { withTheme } from '../../theme';
 
 const getColor = ({ theme, type='neutral' }) => {
   const types = {
@@ -21,6 +22,7 @@ const Button = styled.button`
   padding: calc(${({ theme }) => theme.spacing} / 2) ${({ theme }) => theme.spacing};
   cursor: pointer;
   outline: none;
+  margin: ${({ theme }) => theme.spacing} 0;
 
   &:active {
     border-bottom: 0;
@@ -29,4 +31,4 @@ const Button = styled.button`
   }
 `;
 
-export default Button;
+export default withTheme(Button);

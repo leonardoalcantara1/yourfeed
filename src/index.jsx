@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import App from './App';
-import Theme from './theme';
+import { Theme } from './theme';
 import * as serviceWorker from './serviceWorker';
 
-import { store } from './store/Redux';
+import { store } from './store';
 
 ReactDOM.render(
   <Provider store={store}>
-    <Theme>
+    <Theme.Consumer>
       {
         theme => (
           <div style={{ fontSize: theme.font.size, fontFamily: theme.font.text }}>
@@ -18,7 +18,7 @@ ReactDOM.render(
           </div>
         )
       }
-    </Theme>
+    </Theme.Consumer>
   </Provider>,
   document.getElementById('root')
 );

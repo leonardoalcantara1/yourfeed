@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Grid } from '@material-ui/core';
@@ -6,8 +6,10 @@ import { Grid } from '@material-ui/core';
 import IconButton from '../IconButton';
 import { P, H3 } from '../Typo';
 
+import { withTheme } from '../../theme';
+
 const Wrapper = styled.div`
-  margin: ${({ theme }) => theme.spacing} auto;
+  margin: ${({ theme }) => theme.spacing} auto calc(${({ theme }) => theme.spacing} * 3);
   max-width: 560px;
 `;
 
@@ -17,7 +19,7 @@ const Img = styled.div`
   padding-bottom: 100%;
   background: url(${({ src }) => src}) center;
   background-size: cover;
-  margin-bottom: calc(${({ theme }) => theme.spacing} / 2);
+  margin: calc(${({ theme }) => theme.spacing} / 2) 0;
 `;
 
 const Comment = styled.div`
@@ -57,7 +59,7 @@ const Post = ({
       </H3>
     </Grid>
     <Img src={img} theme={theme} />
-    <Grid container spacing={1}>
+    <Grid container spacing={1} style={{ padding: `calc(${theme.spacing} / 2) 0` }}>
       <Grid item>
         <IconButton type="like" theme={theme} />
       </Grid>
@@ -87,4 +89,4 @@ Post.propTypes = {
   comments: PropTypes.array
 };
 
-export default Post;
+export default withTheme(Post);
