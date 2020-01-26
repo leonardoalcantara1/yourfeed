@@ -1,33 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { TextField } from '@material-ui/core';
-import serialize from 'form-serialize';
 import { Button } from '../../components';
+import { registerFeedName, validateFeedName } from '../../store/user/actions';
 
-const Register = () => {
-  let registerForm;
-  const submit = e => {
-    e.preventDefault();
-    const data = serialize(registerForm, { hash: true });
-    console.log(data);
-  };
+let debounceTimeout;
+const debounce = func => {
+  if (debounceTimeout) {
+    clearTimeout(debounceTimeout);
+  }
+  debounceTimeout = setTimeout(func, 500);
+}
+
+const Register = ({ dispatch }) => {
+  const [feedname, setFeedname] = useState('');
+  const [feednameIsValid, validateFeednameCallback] = useState(null);
+
+  const feednameRegex = /[^a-z0-9._]/g;
 
   return <>
     <form
-      onSubmit={submit}
-      ref={el => registerForm = el}
+      onSubmit={() => dispatch(feedname)}
+      autoComplete="off"
     >
       <TextField
         variant="outlined"
         label="Escolha seu feedname"
         fullWidth
-        helperText="Sem espaços ou caracteres especiais"
+        helperText={
+          (feednameIsValid === false && "Este nome já foi escolhido") ||
+          (feednameIsValid === null && "Sem espaços ou caracteres especiais")
+        }
         name="feedname"
+        onChange={e => {
+          const value = e.target.value.toLowerCase().replace(feednameRegex, '');
+          setFeedname(value);
+          debounce(() => {
+            dispatch(validateFeedName(value, validateFeednameCallback));
+          });
+        }}
+        value={feedname}
+        error={feednameIsValid === false}
       />
-      <Button>
+      <Button disabled={!feednameIsValid} onClick={() => dispatch(registerFeedName(feedname))}>
         Salvar
       </Button>
     </form>
   </>;
 }
 
-export default Register;
+export default connect(
+  null,
+  dispatch => ({ dispatch })
+)(Register);

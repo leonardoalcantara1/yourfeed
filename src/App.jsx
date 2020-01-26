@@ -1,13 +1,15 @@
-import React from 'react';
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { history } from './store';
 import { withTheme, GlobalStyle, themes } from './theme';
 import styled from 'styled-components';
 import Color from 'color';
-import { useStore } from 'react-redux';
+import { connect } from 'react-redux';
+
 import { Login, Register, Feed } from './views';
-// import { Loading } from './components';
+import { listenerLogin } from './store/user/actions';
+import { Loading } from './components';
 
 const Header = styled.header`
   position: fixed;
@@ -33,13 +35,13 @@ const Logo = styled.span`
 
 const Content = styled.div`
   width: 100%;
-  padding: ${({ theme }) => theme.spacing};
+  padding: ${({ theme }) => theme.spacing} ${({ theme }) => theme.spacing} calc(${({ theme }) => theme.spacing} * 2);
   box-sizing: border-box;
   display: flex;
   justify-content: center;
   .wrapper {
     width: 100%;
-    max-width: 600px;
+    max-width: 560px;
   }
 `;
 
@@ -55,7 +57,15 @@ const MaterialTheme = createMuiTheme({
 });
 
 const App = props => {
-  const { user } = useStore().getState();
+  const { user, loading, dispatch } = props;
+
+  useEffect(
+    () => {
+      dispatch(listenerLogin());
+    },
+    ['']
+  );
+
   return <ThemeProvider theme={MaterialTheme}>
     <GlobalStyle />
     <Header theme={props.theme}>
@@ -64,22 +74,41 @@ const App = props => {
       </Logo>
     </Header>
     <Content theme={props.theme}>
-      {/* <Loading /> */}
-      <div className="wrapper" style={{ display: 'initial' }}>
-        <BrowserRouter key="router" history={history}>
-          <Switch>
-            {
-              user
-                ? <Route key="home" name="Home" exact path="/" component={Feed} />
-                : <Route key="login" name="Login" exact path="/" component={Login} />
-            }
-
-            <Route key="register" name="Register" exact path="/register" component={Register} />
-          </Switch>
-        </BrowserRouter>
-      </div>
+      {
+        loading
+        ? <Loading />
+        : (
+          <div className="wrapper" style={{ display: 'initial' }}>
+            <BrowserRouter key="router" history={history}>
+              <Switch>
+                {
+                  user
+                    ? user.feedname && <Route key="home" name="Home" exact path="/" component={Feed} />
+                    : <Route key="login" name="Login" exact path="/" component={Login} />
+                }
+                {
+                  (user && !user.feedname)
+                    ? <>
+                      <Route key="register" name="Register" exact path="/register" component={Register} />
+                      <Redirect to="/register" />
+                    </>
+                    : <Redirect to="/" />
+                }
+              </Switch>
+            </BrowserRouter>
+          </div>
+        )
+      }
     </Content>
   </ThemeProvider>;
 }
 
-export default withTheme(App);
+export default withTheme(connect(
+  ({ user, loading }) => ({
+    user,
+    loading
+  }),
+  dispatch => ({
+    dispatch
+  })
+)(App));

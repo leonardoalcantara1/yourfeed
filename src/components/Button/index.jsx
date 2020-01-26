@@ -20,14 +20,26 @@ const Button = styled.button`
   border-bottom: 4px solid ${props => color(getColor(props)).darken(0.2).rgb().string()};
   border-radius: ${({ theme }) => theme.radius};
   padding: calc(${({ theme }) => theme.spacing} / 2) ${({ theme }) => theme.spacing};
-  cursor: pointer;
   outline: none;
   margin: ${({ theme }) => theme.spacing} 0;
+
+  &:not([disabled]) {
+    cursor: pointer;
+  }
+
+  &[disabled] {
+    opacity: 0.5;
+    border-bottom: 0;
+    transform: translateY(4px);
+    background: ${props => color(getColor(props)).darken(0.2).rgb().string()};
+    margin-bottom: calc(4px + ${({ theme }) => theme.spacing});
+  }
 
   &:active {
     border-bottom: 0;
     transform: translateY(4px);
     background: ${props => color(getColor(props)).darken(0.2).rgb().string()};
+    margin-bottom: calc(4px + ${({ theme }) => theme.spacing});
   }
 `;
 
