@@ -1,15 +1,12 @@
 import firebaseSDK from 'firebase';
 import firebase from '../../firebase';
 import * as types from './actionTypes';
+import { listenerChats } from '../chat/actions';
 import { setLoading } from '../loading/actions';
 import { store } from '../index';
 
 const auth = firebase.auth();
 const db = firebase.firestore();
-
-const validateUser = user => dispatch => {
-  console.log(user);
-}
 
 const setUser = user => ({
   type: types.SET_USER,
@@ -42,6 +39,7 @@ export const listenerLogin = () => dispatch => {
           db.collection('users').doc(user.uid).get()
             .then(doc => {
               dispatch(setUser(doc.data()));
+              setTimeout(() => dispatch(listenerChats()));
             })
             .catch(error => {
               console.log('get user info', error);

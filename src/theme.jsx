@@ -21,6 +21,9 @@ export const themes = {
   dimensions: {
     header: {
       height: '40px'
+    },
+    chatAside: {
+      width: '360px'
     }
   }
 }
@@ -33,6 +36,7 @@ export const GlobalStyle = createGlobalStyle`
   }
   html, body {
     background: ${themes.colors.paper};
+    overscroll-behavior: none;
   }
 
   body {

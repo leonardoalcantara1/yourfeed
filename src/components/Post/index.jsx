@@ -37,29 +37,20 @@ const Avatar = styled.div`
 
 const Post = ({
   theme,
-  img = "https://66.media.tumblr.com/8ed59d4fa4f108329e6266b23cc3a243/tumblr_oagprewYNO1tvnmj2o1_500.jpg",
-  user = {
-    id: '012345',
-    username: 'meuteste',
-    photo: 'https://greenpointcapital.com/wp-content/uploads/2019/05/placeholder-profile.jpg'
-  },
-  comments = [
-    {
-      id: '01234',
-      username: 'meuteste',
-      msg: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, laborum esse reiciendis maiores cumque dolorum aspernatur quidem! Pariatur, molestias in impedit et culpa ipsa odit dolor eaque perspiciatis, nobis ad!'
-    }
-  ]
+  img,
+  user,
+  comments = [],
+  // likes,
 }) => {
   return <Wrapper theme={theme}>
     <Grid container style={{ alignItems: 'center' }}>
-      <Avatar src={user.photo} theme={theme} />
+      <Avatar src={user.photoURL} theme={theme} />
       <H3>
-        {user.username}
+        {user.feedname}
       </H3>
     </Grid>
     <Img src={img} theme={theme} />
-    <Grid container spacing={1} style={{ padding: `calc(${theme.spacing} / 2) 0` }}>
+    {/* <Grid container spacing={1} style={{ padding: `calc(${theme.spacing} / 2) 0` }}>
       <Grid item>
         <IconButton type="like" theme={theme} />
       </Grid>
@@ -69,7 +60,7 @@ const Post = ({
       <Grid container item style={{ alignSelf: 'flex-end', justifyContent: 'flex-end' }} xs>
         <IconButton type="share" theme={theme} />
       </Grid>
-    </Grid>
+    </Grid> */}
     {
       comments && comments.length > 0 && comments.map(
         item => <Comment key={item.id}>
@@ -81,12 +72,5 @@ const Post = ({
     }
   </Wrapper>;
 }
-
-Post.propTypes = {
-  img: PropTypes.string,
-  theme: PropTypes.object,
-  user: PropTypes.object,
-  comments: PropTypes.array
-};
 
 export default withTheme(Post);
