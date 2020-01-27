@@ -1,0 +1,3 @@
+export const STORE_POSTS = 'STORE_POSTS';
+export const RELEASE_POSTS = 'RELEASE_POSTS';
+export const LOADING_POSTS = 'LOADING_POSTS';
